@@ -1,0 +1,33 @@
+body{
+	font-family: "Lato";
+	font-size: 15px;
+}
+.posts{
+	width:700px;
+	margin: auto;
+}
+
+.post{
+	border-bottom: 1px dotted #bbb;
+	padding-bottom: 30px;
+}
+
+.post:last-child{
+	border-bottom: none;
+}
+
+.post:first-child{
+	margin-top: 100px;
+}
+
+.post .title {
+	font-size: 26px;
+	margin-bottom: 30px;
+	margin-top: 40px;
+	text-transform: uppercase;
+}
+
+.post .content{
+	line-height: 33px;
+	font-size:17px ;
+}
