@@ -12,24 +12,24 @@ function scripts_and_styles(){
 
 }
 
-function load_more(){
-	$offset = $_POST['offset'];
-	$number_of_posts = get_option( "posts_per_page");
-	$args = array("number_of_posts"=>$number_of_posts,"offset"=>$offset);
-	$posts = get_posts($args);
-	foreach($posts as $post){
-		setup_postdata( $post );
-		global $post;
-		?>
-		<div class="post">
-			<div class="title"><?php the_title();?></div>
-			<div class="content"><?php the_excerpt();?></div>
-		</div>
-		<?
+	function load_more(){
+		$offset = $_POST['offset'];
+		$number_of_posts = get_option( "posts_per_page");
+		$args = array("posts_per_page"=>$number_of_posts,"offset"=>$offset);
+		$posts = get_posts($args);
+		foreach($posts as $post){
+			setup_postdata( $post );
+			global $post;
+			?>
+			<div class="post">
+				<div class="title"><?php the_title();?></div>
+				<div class="content"><?php the_excerpt();?></div>
+			</div>
+			<?
+		}
+		die();
 	}
-	die();
-}
 
-add_action("wp_ajax_nopriv_load_more","load_more");
-add_action("wp_ajax_load_more","load_more");
+	add_action("wp_ajax_nopriv_load_more","load_more");
+	add_action("wp_ajax_load_more","load_more");
 ?>
