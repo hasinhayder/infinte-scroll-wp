@@ -19,9 +19,10 @@ function load_more(){
 	$posts = get_posts($args);
 	foreach($posts as $post){
 		setup_postdata( $post );
+		global $post;
 		?>
 		<div class="post">
-			<div class="title"><?php echo $post->post_title;?></div>
+			<div class="title"><?php the_title();?></div>
 			<div class="content"><?php the_excerpt();?></div>
 		</div>
 		<?
