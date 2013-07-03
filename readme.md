@@ -73,17 +73,41 @@ The reason for setting th same action hook callbak for both **wp_ajax_no_priv** 
 
 **In javascript**
 	
-	if(loading) return true;
-	if(!loading) {
-		loading=1;
-		var params = {"offset":post_offset,"action":"load_more"}
-		$.post("/wp-admin/admin-ajax.php",params,function(data){
-			if(data){
-				post_offset+=increment;
-				loading=0;
-				$(".posts").append(data);	
-			}
+	var post_offset, increment,loading=0;
+	(function($){
+		$(document).ready(function(){
+			$(window).bind('scroll',checkScroll);
 		});
+
+		var checkScroll = function (e){
+			var elem = $(e.currentTarget);
+			if($(window).scrollTop() + $(window).height() +20 > $(document).height()) {
+				if(loading) return true;
+				if(!loading) {
+					loading=1;
+					var params = {"offset":post_offset,"action":"load_more"}
+					$.post("/wp-admin/admin-ajax.php",params,function(data){
+						if(data){
+							post_offset+=increment;
+							loading=0;
+							$(".posts").append(data);
+							
+						}
+
+					});
+			//now load more content
+		}
 	}
+	}
+	}(jQuery));
 
+Few things to note here. The endpoint URL is one of them. Whenever you are implementing Ajax with WordPress, "/wp-admin/admin-ajax.php" and the use of action variable as "load_more". Remember that we had create our action hooks with this "load_more" action value (wp_ajax_nopriv_**load_more**). 
 
+	add_action("wp_ajax_nopriv_load_more","load_more");
+	add_action("wp_ajax_load_more","load_more");
+	
+In our javascript routine, we also checked the value of **loading** variable hich is false by default, but set as true immediately during an Ajax call is in place and remains true until that Ajax call is finished. This helps to prevent successive call to the Ajax endpoint even before until previous calls are completed. 
+
+One more thing to note and that is how we had increase the value of **post_offset** variable by **increment** value. Both of them are populated in the index.php and contains the same vaue of WordPress option value **posts_per_page**
+
+That's it, mainly :) Fork the repo and check the sourcecode for even better understanding. Have fun
